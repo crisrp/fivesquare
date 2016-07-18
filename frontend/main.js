@@ -1,48 +1,8 @@
 document.addEventListener('DOMContentLoaded',function(){
-  var userinput = document.querySelector('.userInput');
-  var location = document.querySelector('.location')
-  var gmaps = document.getElementById('map')
+var location = document.querySelector('.location')
+var output = document.querySelector('.output')
 
-  location.addEventListener('click',function(){
-    navigator.geolocation.getCurrentPosition(success, error, options);
-  });//location addEventListener Closing tags
-
-  var options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0
-  };
-
-  function success(pos) {
-    var crd = pos.coords;
-
-    console.log('Your current position is:');
-    console.log('Latitude : ' + crd.latitude);
-    console.log('Longitude: ' + crd.longitude);
-    console.log('More or less ' + crd.accuracy + ' meters.');
-  };
-
-  function error(err) {
-    console.warn('ERROR(' + err.code + '): ' + err.message);
-  };
-
-  var map;
-        function initMap() {
-          map = new google.maps.Map(gmaps, {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 8
-          });
-        }
-
-
-
-
-
-});//DOMContentLoaded closing tag
-
-function geoFindMe() {
-  var output = document.getElementById("out");
-
+location.addEventListener('click',function(){
   if (!navigator.geolocation){
     output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
     return;
@@ -67,4 +27,11 @@ function geoFindMe() {
   output.innerHTML = "<p>Locating…</p>";
 
   navigator.geolocation.getCurrentPosition(success, error);
-}
+
+});//location closing tag
+
+
+
+
+
+});//DOMContentLoaded closing tag
