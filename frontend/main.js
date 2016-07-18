@@ -53,7 +53,11 @@
       newele.innerHTML = "<b>Name</b>:"+ name + '</br>' + "<b>Rating</b>: "+ rating + "</br>" + input + submit;
       list.appendChild(newele);
       document.querySelector('#submit').addEventListener('click',function(){
-           console.log(document.querySelector('#rating-input').value);
+           data = {
+                     document.querySelector('#rating-input').value);
+                   }
+
+          //BACKEND GOES HERE
       });
     });
   }
