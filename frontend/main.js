@@ -2,6 +2,7 @@
   // This example requires the Places library. Include the libraries=places
   // parameter when you first load the API. For example:
   // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+  var url = 'http://localhost:3000'
   var list = document.querySelector('#list')
   var map;
   var infowindow;
@@ -48,16 +49,64 @@
       var rating = place.rating;
       var newele = document.createElement('div')
       var input = "<input id='rating-input' type='text' placeholder='My Rating' name='name' value=''>"
-      var submit = "<button id='submit' type='button' name='button'>Submit</button>"
+      var submit = "<button id='submit' type='button' name='button'>Add to Favorites</button>"
+      var display = "<button id='display' type='button' name='button'>My Favorites</button>"
 
-      newele.innerHTML = "<b>Name</b>:"+ name + '</br>' + "<b>Rating</b>: "+ rating + "</br>" + input + submit;
+      newele.innerHTML = "<b>Name</b>:"+ name + '</br>' + "<b>Rating</b>: "+ rating + "</br>" + input + submit + "</br>" + display;
       list.appendChild(newele);
       document.querySelector('#submit').addEventListener('click',function(){
            data = {
-                     document.querySelector('#rating-input').value);
+                     name: name,
+                     rating: rating,
+                     comment: document.querySelector('#rating-input').value
                    }
+                  //Welcome ajax call
+                   $.ajax({
+                           url: url + '/',
+                           dataType: 'json'
+                         }).done(function(response){
+                            console.log(response);
+                         });
 
-          //BACKEND GOES HERE
-      });
-    });
+
+                  //post
+                  $.ajax({
+                      url: url + '/restaurant_db',
+                      method: 'POST',
+                      data: data,
+                      dataType: 'json'
+                  }).done(function(response) {
+                    console.log( "response: ", response );
+                  }); // end AJAX
+      });//Submit Closing Tags
+
+      document.querySelector('#display').addEventListener('click',function(){
+        //Get ALL
+          $.ajax({
+              url: url + '/restaurant_db',
+              dataType: 'json'
+                }).done(function(response){
+
+                  for (i=0;i<response.length;i++){
+
+                    var newele = document.createElement('div')
+                    var name = response[i].name;
+                    var id = response[i]._id;
+                    var rating = response[i].rating;
+                    var comment = response[i].comment;
+                    newele.innerHTML = "<b>Name</b>:"+ name + '</br>' + "<b>Rating</b>: "+ rating + "</br>" + "<b>ID</b>: "+id + "</br>" + comment;
+                    list.appendChild(newele)
+                    var updateele = document.createElement('div')
+                    updateele.innerHTML = "<button id='"+id +"'type='button' name='button'>Update</button>"
+                    list.appendChild(updateele)
+
+                    // document.querySelector('#'+id).addEventListener('click',function(){
+                    //   console.log(name + " to update");
+                    // })
+                  }
+
+                });
+      });//Display Closing Tags
+
+    });//marker eventListener closing tags
   }
